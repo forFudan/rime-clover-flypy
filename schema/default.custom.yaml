@@ -1,0 +1,5 @@
+patch:
+  menu/page_size: 9
+  schema_list:
+    - schema: clover_flypy_17
+    - schema: clover_flypy_14

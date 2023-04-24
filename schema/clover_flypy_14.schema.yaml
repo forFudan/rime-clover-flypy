@@ -1,0 +1,205 @@
+# Rime schema
+# encoding: utf-8
+
+# The following files are needed:
+# -"lua/preedit.lua".
+# -"clover.dict.yaml".
+
+schema:
+  schema_id: clover_flypy_14
+  name: 🍀️四叶草小鹤双拼14键
+  version: 20230424
+  author:
+    - 小鹤双拼 <https://www.flypy.com/>
+    - fkxxyz <https://www.fkxxyz.com>
+    - forFudan <https://zhuyuhao.com/>
+  description: 🍀️四叶草小鹤双拼14键，是一款适合在手机上使用的方案。
+    - 使用🍀️四叶草简体拼音的词库
+    - 使用小鹤双拼方案
+    - 使用14键布局
+    - 输入编码实时反应为第一候选字词的编码
+
+style:
+  theme_name: cosmic14key
+
+switches:
+  - name: ascii_mode
+    reset: 0
+    states: ["中", "英"]
+  - name: full_shape
+    states: ["半", "全"]
+  - name: zh_simp_s2t
+    reset: 0
+    states: ["简", "繁"]
+  - name: ascii_punct
+    states: ["。，", "．，"]
+
+engine:
+  processors:
+    - ascii_composer
+    - recognizer
+    - key_binder
+    - speller
+    - punctuator
+    - selector
+    - navigator
+    - express_editor
+  segmentors:
+    - ascii_segmentor
+    - matcher
+    - abc_segmentor
+    - punct_segmentor
+    - fallback_segmentor
+  translators:
+    - punct_translator
+    - table_translator
+    - script_translator
+  filters:
+    - lua_filter@preedit_filter
+    - simplifier
+    - uniquifier
+
+simplifier:
+  opencc_config: s2t.json
+  option_name: zh_simp_s2t
+
+speller:
+  algebra:
+    - "erase/^xx$/"
+    - "derive/^([jqxy])u/$1v/"
+    - "xform/^([aoe])(ng)?$/$1$1$2/"
+    - "xform/iu$/Q/"
+    - "xform/(.)ei$/$1W/"
+    - "xform/uan$/R/"
+    - "xform/[uv]e$/T/"
+    - "xform/un$/Y/"
+    - "xform/^sh/U/"
+    - "xform/^ch/I/"
+    - "xform/^zh/V/"
+    - "xform/uo$/O/"
+    - "xform/ie$/P/"
+    - "xform/i?ong$/S/"
+    - "xform/ing$|uai$/K/"
+    - "xform/(.)ai$/$1D/"
+    - "xform/(.)en$/$1F/"
+    - "xform/(.)eng$/$1G/"
+    - "xform/[iu]ang$/L/"
+    - "xform/(.)ang$/$1H/"
+    - "xform/ian$/M/"
+    - "xform/(.)an$/$1J/"
+    - "xform/(.)ou$/$1Z/"
+    - "xform/[iu]a$/X/"
+    - "xform/iao$/N/"
+    - "xform/(.)ao$/$1C/"
+    - "xform/ui$/V/"
+    - "xform/in$/B/"
+    - "xlit/QWRTYUIOPSDFGHJKLZXCVBNM/qwrtyuiopsdfghjklzxcvbnm/"
+    - "xlit/qwertyuiopasdfghjklzxcvbnm/qqeettuuooaaddggjjlzzccbbm/"
+  alphabet: abcdefghijklmnopqrstuvwxyz
+  delimiter: "'"
+
+translator:
+  db_class: tabledb
+  dictionary: clover
+  prism: clover_flypy_14
+  enable_completion: true
+  enable_encoder: true
+  enable_sentence: true
+  enable_user_dict: true
+  encode_commit_history: true
+  max_homographs: 6
+  max_homophones: 6
+  max_phrase_length: 10
+  spelling_hints: 16
+  # user_dict: user
+
+grammar:
+  language: "zh-hans-t-essay-bgw"
+
+key_binder:
+  import_preset: default
+  bindings:
+    - { when: always, accept: "Control+period", toggle: ascii_punct }
+    - { when: always, accept: "Control+Shift+F", toggle: zh_simp_s2t }
+    - { when: always, accept: "`", toggle: zh_simp_s2t }
+    - { when: has_menu, accept: bracketleft, send: Page_Up }
+    - { when: has_menu, accept: bracketright, send: Page_Down }
+
+menu:
+  page_size: 9
+
+punctuator:
+  import_preset: symbols
+  full_shape:
+    "`": "｀"
+    "~": "～"
+    "!": "！"
+    "@": "＠"
+    "#": "＃"
+    "$": "￥"
+    "%": "％"
+    "^": "……"
+    "&": "＆"
+    "*": "×"
+    "(": "（"
+    ")": "）"
+    "_": "——"
+    "+": "＋"
+    "-": "－"
+    "=": "＝"
+    "[": "【"
+    "]": "】"
+    "{": "｛"
+    "}": "｝"
+    "|": "｜"
+    "\\": "、"
+    "/": "、"
+    ";": "；"
+    "'": "‘"
+    ",": "，"
+    ".": "。"
+    "<": "《"
+    ">": "》"
+    "?": "？"
+  half_shape:
+    "`": "·"
+    "~": "～"
+    "!": "！"
+    "@": "@"
+    "#": "#"
+    "$": "￥"
+    "%": "%"
+    "^": "……"
+    "&": "&"
+    "*": "×"
+    "(": "（"
+    ")": "）"
+    "_": "——"
+    "+": "+"
+    "-": "-"
+    "=": "="
+    "[": "【"
+    "]": "】"
+    "{": "｛"
+    "}": "｝"
+    "|": "｜"
+    "\\": "、"
+    "/": "、"
+    ";": "；"
+    "'": "’"
+    ",": "，"
+    ".": "。"
+    "<": "《"
+    ">": "》"
+    "?": "？"
+
+recognizer:
+  import_preset: default
+
+# custom_phrase:
+#   db_class: stabledb
+#   dictionary: ""
+#   enable_completion: true
+#   enable_sentence: true
+#   initial_quality: 1
+#   user_dict: custom_phrase
